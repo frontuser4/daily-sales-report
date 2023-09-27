@@ -1,7 +1,8 @@
 import axiosInstance from "../utils/axios";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import {LoginData} from '../context/LoginContext';
 
 const Login = () => {
   const userRef = useRef();
@@ -10,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
+  const { setLoginData } = useContext(LoginData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ const Login = () => {
       });
       if (loginRes.status === 200) {
         localStorage.setItem("token", loginRes.data.token);
+        setLoginData(loginRes.data);
         navigate("/home");
         setSuccess(true);
       }
